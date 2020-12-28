@@ -1,0 +1,39 @@
+server.port: 8181
+
+spring:
+  application.name: customer-service
+  datasource:
+    url: jdbc:mysql://${mysql.service.host}:${mysql.service.port}/${mysql.service.database}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=IST
+    username: ${mysql.service.username}
+    password: ${mysql.service.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show_sql: false
+    open-in-view: false #TODO : OSIV Anti-Pattern, enabled for LazyLoadException
+    properties:
+      #Avoiding performing double validation.
+      #@see javax.persistence.ValidationMode.NONE : persistence provider must not perform lifecycle
+      #event validation
+      javax.persistence.validation.mode: none
+      hibernate:
+        format_sql: false
+        enable_lazy_load_no_trans: true #@TODO : Should Be False
+        event:
+          merge:
+            #Hibernate throws IllegalStateException when merging a parent entity which has
+            #references to 2 detached child entities child1 and child2 (obtained from different sessions),
+            #and child1 and child2 represent the same persistent entity, Child.
+            #Enable hibernate to 'allow' entity copies of any type of entity to be merged
+            entity_copy_observer: allow
+    hibernate:
+      ddl-auto: update
+
+mysql:
+  service:
+    host: localhost
+    port:  3306
+    database: customer_server_demo
+    username: root
+    password: root
