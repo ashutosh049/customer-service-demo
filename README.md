@@ -67,7 +67,7 @@ spring:
   datasource:
     type: ""
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:sirf-db-test;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:customer_demo;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: sa
   hibernate:
